@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>我的作业应用 - 简易计时器</title>
+    <style>
+        body { font-family: sans-serif; text-align: center; padding-top: 50px; background-color: #f4f4f9; }
+        #timer { font-size: 48px; color: #333; margin: 20px; }
+        button { padding: 10px 20px; font-size: 16px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <h1>简易计时器应用</h1>
+    <div id="timer">00:00</div>
+    <button onclick="startTimer()">开始计时</button>
+    <script>
+        let seconds = 0;
+        function startTimer() {
+            setInterval(() => {
+                seconds++;
+                let mins = Math.floor(seconds / 60);
+                let secs = seconds % 60;
+                document.getElementById('timer').innerText = 
+                    (mins < 10 ? '0' : '') + mins + ':' + (secs < 10 ? '0' : '') + secs;
+            }, 1000);
+        }
+    </script>
+</body>
+</html>
