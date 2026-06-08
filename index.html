@@ -2,24 +2,37 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <title>日本生活 救急マップ</title>
+    <title>SNSプランニング支援ツール</title>
     <style>
-        body { font-family: sans-serif; text-align: center; background: #f9f9f9; padding: 20px; }
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; max-width: 400px; margin: 20px auto; }
-        button { padding: 20px; font-size: 16px; cursor: pointer; border: none; border-radius: 10px; background: #fff; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        button:hover { background: #e0e0e0; }
-        h1 { color: #333; }
+        body { font-family: sans-serif; background: #f4f7f6; padding: 20px; display: flex; justify-content: center; }
+        .app-box { background: white; padding: 25px; border-radius: 12px; width: 350px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        select, button { width: 100%; padding: 10px; margin: 10px 0; border-radius: 5px; border: 1px solid #ccc; }
+        button { background: #ff4757; color: white; border: none; font-weight: bold; cursor: pointer; }
+        #output { margin-top: 20px; padding: 15px; background: #fff3f3; border-left: 5px solid #ff4757; }
     </style>
 </head>
 <body>
-    <h1>日本生活：近隣施設検索</h1>
-    <p>今すぐ必要な場所をタップしてください</p>
-    
-    <div class="grid">
-        <button onclick="window.open('https://www.google.com/maps/search/コンビニ')">🏪 コンビニ</button>
-        <button onclick="window.open('https://www.google.com/maps/search/郵便局')">📮 郵便局</button>
-        <button onclick="window.open('https://www.google.com/maps/search/病院')">🏥 近隣の病院</button>
-        <button onclick="window.open('https://www.google.com/maps/search/役所')">🏛️ 市役所</button>
+    <div class="app-box">
+        <h2>SNSコンテンツ企画支援</h2>
+        <label>カテゴリーを選択:</label>
+        <select id="category">
+            <option value="日常">日常・Vlog</option>
+            <option value="技術">プログラミング・学習</option>
+            <option value="グルメ">グルメ・レビュー</option>
+        </select>
+        <button onclick="generateIdea()">アイデアを生成</button>
+        <div id="output">ここに企画アイデアが表示されます</div>
     </div>
+    <script>
+        const ideas = {
+            "日常": "今日のルーティンをタイムラプスで撮影してみよう！",
+            "技術": "今日学んだエラー解決法をTipsとして共有しよう！",
+            "グルメ": "おすすめのお店で一番感動したメニューを投稿しよう！"
+        };
+        function generateIdea() {
+            let cat = document.getElementById("category").value;
+            document.getElementById("output").innerText = "企画案: " + ideas[cat];
+        }
+    </script>
 </body>
 </html>
