@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>日本生活支援ポータル</title>
+    <link rel="manifest" href="manifest.json">
     <style>
         body { font-family: 'Helvetica Neue', sans-serif; background-color: #f8f9fa; padding: 20px; text-align: center; }
         .container { max-width: 600px; margin: auto; }
@@ -24,36 +25,41 @@
         
         <div class="section-title">生活基盤</div>
         <div class="grid">
-            <button onclick="search('コンビニ')">🏪 コンビニ</button>
-            <button onclick="search('スーパー')">🛒 スーパー</button>
-            <button onclick="search('郵便局')">📮 郵便局</button>
-            <button onclick="search('市役所')">🏛️ 市役所</button>
-            <button onclick="search('図書館')">📚 図書館</button>
-            <button onclick="search('銀行')">🏦 銀行</button>
+            <button onclick="search('コンビニ', this)">🏪 コンビニ</button>
+            <button onclick="search('スーパー', this)">🛒 スーパー</button>
+            <button onclick="search('郵便局', this)">📮 郵便局</button>
+            <button onclick="search('市役所', this)">🏛️ 市役所</button>
+            <button onclick="search('図書館', this)">📚 図書館</button>
+            <button onclick="search('銀行', this)">🏦 銀行</button>
         </div>
 
         <div class="section-title">緊急・医療</div>
         <div class="grid">
-            <button onclick="search('病院')">🏥 病院</button>
-            <button onclick="search('交番')">👮 交番</button>
-            <button onclick="search('薬局')">💊 薬局</button>
+            <button onclick="search('病院', this)">🏥 病院</button>
+            <button onclick="search('交番', this)">👮 交番</button>
+            <button onclick="search('薬局', this)">💊 薬局</button>
         </div>
 
         <div class="section-title">リフレッシュ</div>
         <div class="grid">
-            <button onclick="search('公園')">🌳 公園</button>
-            <button onclick="search('カフェ')">☕ カフェ</button>
-            <button onclick="search('銭湯')">♨️ 銭湯</button>
+            <button onclick="search('公園', this)">🌳 公園</button>
+            <button onclick="search('カフェ', this)">☕ カフェ</button>
+            <button onclick="search('銭湯', this)">♨️ 銭湯</button>
             <button onclick="call('110')">🚨 警察 (110)</button>
             <button onclick="call('119')">🚑 救急 (119)</button>
         </div>
     </div>
 
     <script>
-        // 地图搜索函数
-        function search(keyword) {
+        // 地图搜索函数（带加载状态）
+        function search(keyword, btn) {
+            const originalText = btn.innerText;
+            btn.innerText = "検索中...";
+            
             const url = `https://www.google.com/maps/search/${encodeURIComponent(keyword)}`;
             window.open(url, '_blank');
+            
+            setTimeout(() => { btn.innerText = originalText; }, 1000);
         }
 
         // 拨号函数
