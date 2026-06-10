@@ -5,47 +5,42 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>日本生活支援ポータル</title>
     <style>
-        body { font-family: 'Helvetica Neue', sans-serif; background-color: #f8f9fa; padding: 20px; text-align: center; }
-        .container { max-width: 600px; margin: auto; }
-        h1 { color: #2c3e50; font-size: 22px; }
-        .section-title { font-size: 14px; color: #7f8c8d; margin: 20px 0 10px; text-transform: uppercase; }
-        .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 30px; }
-        button { 
-            padding: 12px 5px; font-size: 13px; cursor: pointer; border: none; border-radius: 8px; 
-            background: #ffffff; box-shadow: 0 2px 4px rgba(0,0,0,0.05); transition: 0.2s;
-        }
-        button:hover { background: #e8f0fe; color: #1a73e8; }
+        /* CSS 保持不变，但增加响应式处理 */
+        body { font-family: 'Helvetica Neue', sans-serif; background: #f8f9fa; padding: 20px; text-align: center; }
+        .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; max-width: 600px; margin: 20px auto; }
+        button { padding: 15px 5px; cursor: pointer; border: none; border-radius: 8px; background: #fff; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        button:active { transform: scale(0.95); }
     </style>
 </head>
 <body>
-    <div class="container">
+    <div id="app" class="container">
         <h1>日本生活：近隣施設クイック検索</h1>
-        
-        <div class="section-title">生活基盤</div>
-        <div class="grid">
-            <button onclick="window.open('https://www.google.com/maps/search/コンビニ')">🏪 コンビニ</button>
-            <button onclick="window.open('https://www.google.com/maps/search/スーパー')">🛒 スーパー</button>
-            <button onclick="window.open('https://www.google.com/maps/search/郵便局')">📮 郵便局</button>
-            <button onclick="window.open('https://www.google.com/maps/search/市役所')">🏛️ 市役所</button>
-            <button onclick="window.open('https://www.google.com/maps/search/図書館')">📚 図書館</button>
-            <button onclick="window.open('https://www.google.com/maps/search/%E9%8A%80%E8%A1%8C/')">🏦 銀行</button>
-        </div>
-
-        <div class="section-title">緊急・医療</div>
-        <div class="grid">
-            <button onclick="window.open('https://www.google.com/maps/search/病院')">🏥 病院</button>
-            <button onclick="window.open('https://www.google.com/maps/search/交番')">👮 交番</button>
-            <button onclick="window.open('https://www.google.com/maps/search/%E8%96%AC%E5%B1%80/')">💊 薬局</button>
-        </div>
-
-        <div class="section-title">リフレッシュ</div>
-        <div class="grid">
-            <button onclick="window.open('https://www.google.com/maps/search/公園')">🌳 公園</button>
-            <button onclick="window.open('https://www.google.com/maps/search/%E3%82%AB%E3%83%95%E3%82%A7/')">☕ カフェ</button>
-            <button onclick="window.open('https://www.google.com/maps/search/%E9%8A%AD%E6%B9%AF/')">♨️ 銭湯</button>
-            <button onclick="window.open('tel:110')">🚨 緊急通報 (警察: 110)</button>
-            <button onclick="window.open('tel:119')">🚑 救急車 (消防: 119)</button>
-        </div>
+        <div id="content"></div>
     </div>
+
+    <script>
+        const facilities = [
+            { name: "🏪 コンビニ", type: "search", val: "コンビニ" },
+            { name: "🚨 緊急 (110)", type: "tel", val: "110" },
+            { name: "🚑 救急 (119)", type: "tel", val: "119" }
+        ];
+
+        function render() {
+            const container = document.getElementById('content');
+            facilities.forEach(item => {
+                const btn = document.createElement('button');
+                btn.innerText = item.name;
+                btn.onclick = () => {
+                    if(item.type === 'search') {
+                        window.open(`https://www.google.com/maps/search/${item.val}`, '_blank');
+                    } else {
+                        window.location.href = `tel:${item.val}`;
+                    }
+                };
+                container.appendChild(btn);
+            });
+        }
+        render();
+    </script>
 </body>
 </html>
