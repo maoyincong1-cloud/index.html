@@ -1,3 +1,9 @@
+// 在 <script> 标签中添加此函数
+function searchFacility(keyword) {
+    const url = `https://www.google.com/maps/search/${encodeURIComponent(keyword)}`;
+    window.open(url, '_blank');
+}
+
 <!DOCTYPE html>
 <html lang="ja">
 <head>
