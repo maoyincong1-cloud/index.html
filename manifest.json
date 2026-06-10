@@ -1,0 +1,8 @@
+{
+  "name": "日本生活支援ポータル",
+  "short_name": "生活支援",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#f8f9fa",
+  "theme_color": "#1a73e8"
+}
