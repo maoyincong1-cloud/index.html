@@ -3,49 +3,69 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Life Command Center</title>
+    <title>日本生活支援ポータル</title>
+    <link rel="manifest" href="manifest.json">
     <style>
-        body { font-family: sans-serif; background: #0f172a; color: #f8fafc; padding: 20px; }
-        .widget-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; }
-        .card { background: #1e293b; padding: 20px; border-radius: 12px; }
-        .alert-bar { background: #ef4444; padding: 10px; border-radius: 8px; margin-bottom: 20px; font-weight: bold; }
-        .btn-action { display: block; width: 100%; padding: 12px; margin-top: 8px; border-radius: 6px; border: none; background: #3b82f6; color: white; cursor: pointer; }
+        body { font-family: 'Helvetica Neue', sans-serif; background-color: #f8f9fa; padding: 20px; text-align: center; }
+        .container { max-width: 600px; margin: auto; }
+        h1 { color: #2c3e50; font-size: 22px; margin-bottom: 20px; }
+        .section-title { font-size: 14px; color: #7f8c8d; margin: 20px 0 10px; text-transform: uppercase; font-weight: bold; }
+        .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 30px; }
+        button { 
+            padding: 12px 5px; font-size: 13px; cursor: pointer; border: none; border-radius: 8px; 
+            background: #ffffff; box-shadow: 0 2px 4px rgba(0,0,0,0.05); transition: 0.2s;
+        }
+        button:hover { background: #e8f0fe; color: #1a73e8; }
+        button:active { transform: scale(0.95); }
     </style>
 </head>
 <body>
-    <div class="alert-bar" id="alert-zone">System: Detecting regional conditions...</div>
-    
-    <div class="widget-grid">
-        <div class="card">
-            <h3>🤖 AI 生活向导</h3>
-            <p id="ai-suggestion">Loading context...</p>
-            <button class="btn-action" onclick="fetchAIInsight()">刷新决策建议</button>
-        </div>
+    <div class="container">
+        <h1>日本生活：近隣施設クイック検索</h1>
         
-        <div class="card">
-            <h3>📍 快速撤离/搜索</h3>
-            <button class="btn-action" onclick="window.open('https://www.google.com/maps/search/郵便局2')">搜索附近医院 (ER)</button>
-            <button class="btn-action" onclick="window.open('https://www.google.com/maps/search/郵便局3')">查看电车运行状态</button>
+        <div class="section-title">生活基盤</div>
+        <div class="grid">
+            <button onclick="search('コンビニ', this)">🏪 コンビニ</button>
+            <button onclick="search('スーパー', this)">🛒 スーパー</button>
+            <button onclick="search('郵便局', this)">📮 郵便局</button>
+            <button onclick="search('市役所', this)">🏛️ 市役所</button>
+            <button onclick="search('図書館', this)">📚 図書館</button>
+            <button onclick="search('銀行', this)">🏦 銀行</button>
+        </div>
+
+        <div class="section-title">緊急・医療</div>
+        <div class="grid">
+            <button onclick="search('病院', this)">🏥 病院</button>
+            <button onclick="search('交番', this)">👮 交番</button>
+            <button onclick="search('薬局', this)">💊 薬局</button>
+        </div>
+
+        <div class="section-title">リフレッシュ</div>
+        <div class="grid">
+            <button onclick="search('公園', this)">🌳 公園</button>
+            <button onclick="search('カフェ', this)">☕ カフェ</button>
+            <button onclick="search('銭湯', this)">♨️ 銭湯</button>
+            <button onclick="call('110')">🚨 警察 (110)</button>
+            <button onclick="call('119')">🚑 救急 (119)</button>
         </div>
     </div>
 
     <script>
-        // 模拟逻辑：根据时间/地理位置动态判断
-        function fetchAIInsight() {
-            const time = new Date().getHours();
-            const el = document.getElementById('ai-suggestion');
-            const alertEl = document.getElementById('alert-zone');
+        // 地图搜索函数（带加载状态）
+        function search(keyword, btn) {
+            const originalText = btn.innerText;
+            btn.innerText = "検索中...";
             
-            // 复杂的逻辑判断模拟
-            if(time > 22) {
-                alertEl.innerText = "🚨 安全提醒: 夜间时段，请检查门窗并确保手机电量充足。";
-                el.innerText = "建议: 此时段电车频率降低，若有出行计划请务必检查 Google Maps 的实时路线。";
-            } else {
-                alertEl.innerText = "✅ 系统正常: 当前环境信息无异常。";
-                el.innerText = "建议: 利用午间时段处理役所业务或办理邮政事务。";
-            }
+            const url = `https://www.google.com/maps/search/${encodeURIComponent(keyword)}`;
+            window.open(url, '_blank');
+            
+            setTimeout(() => { btn.innerText = originalText; }, 1000);
         }
-        fetchAIInsight();
+
+        // 拨号函数
+        function call(number) {
+            window.location.href = `tel:${number}`;
+        }
     </script>
 </body>
 </html>
