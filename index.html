@@ -2,69 +2,45 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>日本生活支援ポータル</title>
-    <link rel="manifest" href="manifest.json">
+    <title>生活管理ダッシュボード</title>
     <style>
-        body { font-family: 'Helvetica Neue', sans-serif; background-color: #f8f9fa; padding: 20px; text-align: center; }
-        .container { max-width: 600px; margin: auto; }
-        h1 { color: #2c3e50; font-size: 22px; margin-bottom: 20px; }
-        .section-title { font-size: 14px; color: #7f8c8d; margin: 20px 0 10px; text-transform: uppercase; font-weight: bold; }
-        .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 30px; }
-        button { 
-            padding: 12px 5px; font-size: 13px; cursor: pointer; border: none; border-radius: 8px; 
-            background: #ffffff; box-shadow: 0 2px 4px rgba(0,0,0,0.05); transition: 0.2s;
-        }
-        button:hover { background: #e8f0fe; color: #1a73e8; }
-        button:active { transform: scale(0.95); }
+        body { font-family: sans-serif; background: #f0f2f5; padding: 20px; }
+        .container { max-width: 400px; margin: auto; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .item { display: flex; justify-content: space-between; padding: 10px; border-bottom: 1px solid #eee; transition: 0.3s; }
+        .done { text-decoration: line-through; color: #888; }
+        input { width: 70%; padding: 8px; }
+        button { padding: 8px; cursor: pointer; }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>日本生活：近隣施設クイック検索</h1>
-        
-        <div class="section-title">生活基盤</div>
-        <div class="grid">
-            <button onclick="search('コンビニ', this)">🏪 コンビニ</button>
-            <button onclick="search('スーパー', this)">🛒 スーパー</button>
-            <button onclick="search('郵便局', this)">📮 郵便局</button>
-            <button onclick="search('市役所', this)">🏛️ 市役所</button>
-            <button onclick="search('図書館', this)">📚 図書館</button>
-            <button onclick="search('銀行', this)">🏦 銀行</button>
-        </div>
-
-        <div class="section-title">緊急・医療</div>
-        <div class="grid">
-            <button onclick="search('病院', this)">🏥 病院</button>
-            <button onclick="search('交番', this)">👮 交番</button>
-            <button onclick="search('薬局', this)">💊 薬局</button>
-        </div>
-
-        <div class="section-title">リフレッシュ</div>
-        <div class="grid">
-            <button onclick="search('公園', this)">🌳 公園</button>
-            <button onclick="search('カフェ', this)">☕ カフェ</button>
-            <button onclick="search('銭湯', this)">♨️ 銭湯</button>
-            <button onclick="call('110')">🚨 警察 (110)</button>
-            <button onclick="call('119')">🚑 救急 (119)</button>
-        </div>
+        <h1>タスク管理</h1>
+        <input type="text" id="task" placeholder="例：電気代を払う...">
+        <button onclick="add()">追加</button>
+        <div id="list"></div>
+        <p>残りタスク: <span id="count">0</span></p>
     </div>
 
     <script>
-        // 地图搜索函数（带加载状态）
-        function search(keyword, btn) {
-            const originalText = btn.innerText;
-            btn.innerText = "検索中...";
-            
-            const url = `https://www.google.com/maps/search/${encodeURIComponent(keyword)}`;
-            window.open(url, '_blank');
-            
-            setTimeout(() => { btn.innerText = originalText; }, 1000);
+        let tasks = [];
+        function add() {
+            let val = document.getElementById("task").value;
+            if(!val) return;
+            tasks.push({text: val, done: false});
+            render();
+            document.getElementById("task").value = "";
         }
-
-        // 拨号函数
-        function call(number) {
-            window.location.href = `tel:${number}`;
+        function toggle(i) {
+            tasks[i].done = !tasks[i].done;
+            render();
+        }
+        function render() {
+            let list = document.getElementById("list");
+            list.innerHTML = "";
+            tasks.forEach((t, i) => {
+                list.innerHTML += `<div class="item ${t.done ? 'done' : ''}" onclick="toggle(${i})">${t.text}</div>`;
+            });
+            document.getElementById("count").innerText = tasks.filter(t => !t.done).length;
         }
     </script>
 </body>
