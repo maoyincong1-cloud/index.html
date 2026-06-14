@@ -2,46 +2,57 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <title>生活管理ダッシュボード</title>
+    <title>日本生活管理ダッシュボード</title>
     <style>
-        body { font-family: sans-serif; background: #f0f2f5; padding: 20px; }
-        .container { max-width: 400px; margin: auto; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        .item { display: flex; justify-content: space-between; padding: 10px; border-bottom: 1px solid #eee; transition: 0.3s; }
-        .done { text-decoration: line-through; color: #888; }
-        input { width: 70%; padding: 8px; }
-        button { padding: 8px; cursor: pointer; }
+        body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; padding: 20px; }
+        .container { max-width: 500px; margin: auto; background: white; padding: 25px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+        h2 { border-left: 5px solid #1a73e8; padding-left: 10px; color: #333; }
+        .input-group { display: flex; gap: 5px; margin-bottom: 20px; }
+        input { flex: 1; padding: 10px; border: 1px solid #ccc; border-radius: 5px; }
+        button { padding: 10px 15px; background: #1a73e8; color: white; border: none; border-radius: 5px; cursor: pointer; }
+        .list-item { padding: 10px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>タスク管理</h1>
-        <input type="text" id="task" placeholder="例：電気代を払う...">
-        <button onclick="add()">追加</button>
-        <div id="list"></div>
-        <p>残りタスク: <span id="count">0</span></p>
+        <h2>📊 日本生活管理</h2>
+        
+        <div class="input-group">
+            <input type="text" id="input" placeholder="タスクや出費を入力...">
+            <button onclick="addItem()">追加</button>
+        </div>
+        
+        <div id="displayArea"></div>
+        <p>合計項目数: <span id="total">0</span></p>
     </div>
 
     <script>
-        let tasks = [];
-        function add() {
-            let val = document.getElementById("task").value;
-            if(!val) return;
-            tasks.push({text: val, done: false});
-            render();
-            document.getElementById("task").value = "";
-        }
-        function toggle(i) {
-            tasks[i].done = !tasks[i].done;
-            render();
-        }
+        let data = JSON.parse(localStorage.getItem('lifeData')) || [];
+
         function render() {
-            let list = document.getElementById("list");
+            const list = document.getElementById('displayArea');
             list.innerHTML = "";
-            tasks.forEach((t, i) => {
-                list.innerHTML += `<div class="item ${t.done ? 'done' : ''}" onclick="toggle(${i})">${t.text}</div>`;
+            data.forEach((item, index) => {
+                list.innerHTML += `<div class="list-item">${item} <button onclick="del(${index})">×</button></div>`;
             });
-            document.getElementById("count").innerText = tasks.filter(t => !t.done).length;
+            document.getElementById('total').innerText = data.length;
+            localStorage.setItem('lifeData', JSON.stringify(data));
         }
+
+        function addItem() {
+            const val = document.getElementById('input').value;
+            if(!val) return;
+            data.push(val);
+            document.getElementById('input').value = "";
+            render();
+        }
+
+        function del(i) {
+            data.splice(i, 1);
+            render();
+        }
+
+        render(); // 初始化渲染
     </script>
 </body>
 </html>
