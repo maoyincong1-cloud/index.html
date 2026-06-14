@@ -2,57 +2,47 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <title>日本生活管理ダッシュボード</title>
+    <title>Japan Life Command Center</title>
     <style>
-        body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; padding: 20px; }
-        .container { max-width: 500px; margin: auto; background: white; padding: 25px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
-        h2 { border-left: 5px solid #1a73e8; padding-left: 10px; color: #333; }
-        .input-group { display: flex; gap: 5px; margin-bottom: 20px; }
-        input { flex: 1; padding: 10px; border: 1px solid #ccc; border-radius: 5px; }
-        button { padding: 10px 15px; background: #1a73e8; color: white; border: none; border-radius: 5px; cursor: pointer; }
-        .list-item { padding: 10px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; }
+        :root { --primary: #2563eb; }
+        body { font-family: sans-serif; background: #f8fafc; padding: 20px; }
+        .dashboard { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; max-width: 800px; margin: auto; }
+        .card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+        .btn-map { background: var(--primary); color: white; border: none; padding: 10px; border-radius: 6px; cursor: pointer; width: 100%; }
+        #ai-console { background: #1e293b; color: #38bdf8; padding: 15px; border-radius: 8px; font-family: monospace; }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h2>📊 日本生活管理</h2>
-        
-        <div class="input-group">
-            <input type="text" id="input" placeholder="タスクや出費を入力...">
-            <button onclick="addItem()">追加</button>
+    <div class="dashboard">
+        <div class="card">
+            <h3>📍 地理中枢</h3>
+            <button class="btn-map" onclick="navigate('医院')">搜索附近医院</button>
+            <button class="btn-map" onclick="navigate('避难所')">搜索附近避难所</button>
         </div>
-        
-        <div id="displayArea"></div>
-        <p>合計項目数: <span id="total">0</span></p>
+
+        <div class="card">
+            <h3>🤖 AI 决策建议</h3>
+            <div id="ai-console">Waiting for location signal...</div>
+            <button onclick="getAIDecision()" style="margin-top: 10px;">执行 AI 分析</button>
+        </div>
     </div>
 
     <script>
-        let data = JSON.parse(localStorage.getItem('lifeData')) || [];
-
-        function render() {
-            const list = document.getElementById('displayArea');
-            list.innerHTML = "";
-            data.forEach((item, index) => {
-                list.innerHTML += `<div class="list-item">${item} <button onclick="del(${index})">×</button></div>`;
-            });
-            document.getElementById('total').innerText = data.length;
-            localStorage.setItem('lifeData', JSON.stringify(data));
+        function navigate(type) {
+            // 利用 Google Maps 深度集成能力
+            window.open(`https://www.google.com/maps/search/${encodeURIComponent(type)}`);
         }
 
-        function addItem() {
-            const val = document.getElementById('input').value;
-            if(!val) return;
-            data.push(val);
-            document.getElementById('input').value = "";
-            render();
+        async function getAIDecision() {
+            const consoleEl = document.getElementById('ai-console');
+            consoleEl.innerText = "Analyzing environment...";
+            // 模拟 AI 决策逻辑：根据地理位置/时间给出建议
+            setTimeout(() => {
+                const hour = new Date().getHours();
+                const advice = hour < 18 ? "当前处于日间，建议避开通勤高峰，前往附近超市采购。" : "夜间光线较暗，请优先选择大路通行。";
+                consoleEl.innerText = `> ${advice}`;
+            }, 1000);
         }
-
-        function del(i) {
-            data.splice(i, 1);
-            render();
-        }
-
-        render(); // 初始化渲染
     </script>
 </body>
 </html>
