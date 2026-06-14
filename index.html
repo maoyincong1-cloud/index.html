@@ -2,63 +2,50 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <title>Smart Life Hub - Kawaguchi Edition</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Life Command Center</title>
     <style>
-        :root { --primary: #3b82f6; }
-        body { font-family: 'Segoe UI', system-ui; background: #0f172a; color: white; padding: 20px; }
-        .grid-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
-        .card { background: #1e293b; padding: 20px; border-radius: 16px; border: 1px solid #334155; }
-        .status-badge { padding: 4px 8px; border-radius: 4px; background: #ef4444; font-size: 12px; }
-        button { background: var(--primary); color: white; border: none; padding: 12px; border-radius: 8px; cursor: pointer; width: 100%; margin-top: 10px; }
+        body { font-family: sans-serif; background: #0f172a; color: #f8fafc; padding: 20px; }
+        .widget-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; }
+        .card { background: #1e293b; padding: 20px; border-radius: 12px; }
+        .alert-bar { background: #ef4444; padding: 10px; border-radius: 8px; margin-bottom: 20px; font-weight: bold; }
+        .btn-action { display: block; width: 100%; padding: 12px; margin-top: 8px; border-radius: 6px; border: none; background: #3b82f6; color: white; cursor: pointer; }
     </style>
 </head>
 <body>
-    <header>
-        <h1>Smart Life Command Center</h1>
-        <p id="geo-status">System Initialized: Ready to monitor...</p>
-    </header>
-
-    <div class="grid-container">
+    <div class="alert-bar" id="alert-zone">System: Detecting regional conditions...</div>
+    
+    <div class="widget-grid">
         <div class="card">
-            <h3>📍 Intelligent Location Engine</h3>
-            <div id="facility-list"></div>
-            <button onclick="updateLocation()">手动校准坐标系</button>
+            <h3>🤖 AI 生活向导</h3>
+            <p id="ai-suggestion">Loading context...</p>
+            <button class="btn-action" onclick="fetchAIInsight()">刷新决策建议</button>
         </div>
-
+        
         <div class="card">
-            <h3>🧠 Logic & Context Engine</h3>
-            <div id="ai-output">Analyzing current environment context...</div>
+            <h3>📍 快速撤离/搜索</h3>
+            <button class="btn-action" onclick="window.open('https://www.google.com/maps/search/郵便局2')">搜索附近医院 (ER)</button>
+            <button class="btn-action" onclick="window.open('https://www.google.com/maps/search/郵便局3')">查看电车运行状态</button>
         </div>
     </div>
 
     <script>
-        const facilities = ['病院', '市役所', 'スーパー', '交番'];
-        
-        // 核心工程逻辑：地理位置感知引擎
-        function updateLocation() {
-            navigator.geolocation.getCurrentPosition(pos => {
-                const { latitude, longitude } = pos.coords;
-                document.getElementById('geo-status').innerText = `Location Locked: ${latitude.toFixed(4)}, ${longitude.toFixed(4)}`;
-                triggerAIScenario(latitude, longitude);
-            });
-        }
-
-        function triggerAIScenario(lat, lon) {
+        // 模拟逻辑：根据时间/地理位置动态判断
+        function fetchAIInsight() {
             const time = new Date().getHours();
-            const output = document.getElementById('ai-output');
-            // 复杂逻辑判断
-            if (time >= 22 || time <= 5) {
-                output.innerHTML = "Night Mode Active: <br>Nearest 24h Convenience Store identified. Safety path enabled.";
+            const el = document.getElementById('ai-suggestion');
+            const alertEl = document.getElementById('alert-zone');
+            
+            // 复杂的逻辑判断模拟
+            if(time > 22) {
+                alertEl.innerText = "🚨 安全提醒: 夜间时段，请检查门窗并确保手机电量充足。";
+                el.innerText = "建议: 此时段电车频率降低，若有出行计划请务必检查 Google Maps 的实时路线。";
             } else {
-                output.innerHTML = "Day Mode Active: <br>Traffic density normal. Recommended facility path optimized.";
+                alertEl.innerText = "✅ 系统正常: 当前环境信息无异常。";
+                el.innerText = "建议: 利用午间时段处理役所业务或办理邮政事务。";
             }
         }
-
-        // 初始化渲染
-        const container = document.getElementById('facility-list');
-        facilities.forEach(f => {
-            container.innerHTML += `<button onclick="window.open('https://www.google.com/maps/search/${f}')">Search ${f}</button>`;
-        });
+        fetchAIInsight();
     </script>
 </body>
 </html>
